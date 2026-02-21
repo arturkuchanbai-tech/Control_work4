@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Фильмы</h1>
+
+<form method="get" action="{% url 'movie_search' %}">
+    <input type="text" name="q" placeholder="Поиск по названию">
+    <button>Поиск</button>
+</form>
+
+<ul>
+    {% for movie in movies %}
+    <li>
+        <a href="{% url 'movie_detail' movie.pk %}">{{ movie.title }}</a> |
+        {{ movie.genre.name }} |
+        Рейтинг: {{ movie.rating }}
+        {% if user.is_authenticated %}
+        | <a href="{% url 'movie_edit' movie.pk %}">Изменить</a>
+        | <a href="{% url 'movie_delete' movie.pk %}">Удалить</a>
+        {% endif %}
+    </li>
+    {% empty %}
+    <li>Фильмов пока нет</li>
+    {% endfor %}
+</ul>
+
+{% if user.is_authenticated %}
+<a href="{% url 'movie_add' %}">Добавить фильм</a>
+{% endif %}
+{% endblock %}

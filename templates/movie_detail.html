@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ object.title }}</h1>
+<p>{{ object.description }}</p>
+<p>Жанр: {{ object.genre.name }}</p>
+<p>Дата выхода: {{ object.release_date }}</p>
+<p>Рейтинг: {{ object.rating }}</p>
+
+<h2>Комментарии</h2>
+<ul>
+    {% for comment in object.comments.all %}
+    <li>{{ comment.author.username }}: {{ comment.text }}</li>
+    {% endfor %}
+</ul>
+
+{% if user.is_authenticated %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button>Добавить комментарий</button>
+</form>
+{% else %}
+<p><a href="{% url 'login' %}">Войдите, чтобы комментировать</a></p>
+{% endif %}
+{% endblock %}
